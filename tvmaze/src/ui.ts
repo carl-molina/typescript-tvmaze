@@ -75,23 +75,29 @@ $searchForm.on("submit", async function (evt) {
 */
 
 function populateEpisodes(episodes: IShow[]) {
+
+  console.log("populateEpisodes function called")
   $episodesArea.empty();
   const $episodesUl = $("#episodesList")
   for (let episode of episodes){
     const $episode = $(
             `<li>${episode.name} (${episode.season}, ${episode.number})</li>`
           );
-    $episodesUl.append($episode);
+    $episodesArea.append($episode);
   }
+  $episodesArea.show()
 }
-
-$episodesArea.on("click", async function (evt) {
+// event delegate to
+$showsList.on("click", ".Show-getEpisodes", async function (evt) {
   evt.preventDefault();
-  const showId = $(evt.target).closest("div[data-show-id]").attr("data-show-id");
+  const showId = $(evt.target).closest(".Show").data("show-id");
+  console.log("showId is: ", showId)
 
   const numShowId = Number(showId);
 
   const episodesOfShow = await getEpisodesOfShow(numShowId);
+
+  console.log("episodesOfShow is: ", episodesOfShow )
 
   populateEpisodes(episodesOfShow);
 });
