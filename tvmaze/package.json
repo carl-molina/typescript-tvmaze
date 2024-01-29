@@ -1,0 +1,23 @@
+{
+  "name": "tvmaze",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.5",
+    "fetch-mock": "^9.11.0",
+    "jsdom": "^24.0.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vitest": "^1.2.2"
+  },
+  "dependencies": {
+    "jquery": "*"
+  }
+}
