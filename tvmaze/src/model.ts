@@ -23,7 +23,7 @@ interface IShow {
  *    (if no image URL given by API, put in a default image URL)
  */
 
-async function searchShowsByTerm(term: string): Promise<[IShows]> {
+async function searchShowsByTerm(term: string): Promise<IShows[]> {
   // ADD: Remove placeholder & make request to TVMaze search shows API.
 
   const params = new URLSearchParams({q: term});
@@ -49,7 +49,7 @@ async function searchShowsByTerm(term: string): Promise<[IShows]> {
  *      { id, name, season, number }
  */
 
-async function getEpisodesOfShow(id: number): (Promise<[IShow]> ) {
+async function getEpisodesOfShow(id: number): (Promise<IShow[]> ) {
 
   const res = await fetch(`${TVMAZE_API_URL}shows/${id}/episodes`);
 
