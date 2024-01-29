@@ -34,14 +34,14 @@ async function searchShowsByTerm(term: "string"): Promise<[]> {
 
   console.log("This is showsData: ", showsData);
 
-  showsData.map(s => ({
+  const filteredShowsData = showsData.map(s => ({
     id: s.show.id,
     name: s.show.name,
     summary: s.show.summary,
     image: s.show.image ? s.show.image.medium : MISSING_IMAGE_URL,
   }));
 
-  return showsData;
+  return filteredShowsData;
 }
 
 
@@ -49,13 +49,31 @@ async function searchShowsByTerm(term: "string"): Promise<[]> {
  *      { id, name, season, number }
  */
 
-async function getEpisodesOfShow(id: "string"): Promise<IShow> {
+async function getEpisodesOfShow(id: "number"): (Promise<[]> ) {
+let res;
 
-  const res = await fetch(`${TVMAZE_API_URL}/lookup/shows/${id}/episodes`);
+    try {
+      res = await fetch(`${TVMAZE_API_URL}shows/${id}/episodes`);
+    } catch (err: any) {
+      console.log("error message", err)
+      throw err
+    }
+
 
   const showData = await res.json();
 
-  return showData;
+  console.log("This is showData: ", showData);
+
+  const filteredShowData = showData.map(s => ({
+    id: s.id,
+    name: s.name,
+    season: s.season,
+    number: s.number
+  }))
+
+  console.log("This is filteredShowData: ", filteredShowData);
+
+  return filteredShowData;
 }
 
 

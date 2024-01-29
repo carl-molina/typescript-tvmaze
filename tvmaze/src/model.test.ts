@@ -21,7 +21,7 @@ describe("getEpisodesOfShow", function () {
 
   it("should successfully search", async function () {
     // @ts-ignore --- the type "string[]" is wrong; fix it!
-    const episodes: string[] = await getEpisodesOfShow(1767);
+    const episodes: object[] = await getEpisodesOfShow(1767);
     expect(episodes.length).toEqual(7);
   });
 
