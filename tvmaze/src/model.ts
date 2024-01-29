@@ -2,12 +2,10 @@ const MISSING_IMAGE_URL = "https://tinyurl.com/missing-tv";
 const TVMAZE_API_URL = "https://api.tvmaze.com/";
 
 interface IShows {
-  show: {
     id: number,
     name: string,
     summary: string,
     image: string,
-  }
 }
 
 interface IShow {
@@ -36,15 +34,12 @@ async function searchShowsByTerm(term: "string"): Promise<[]> {
 
   console.log("This is showsData: ", showsData);
 
-  showsData.map(results => (
-    const singleShow = results.show;
-    {
-      id: singleShow.id,
-      name: show.name,
-      summary: show.summary,
-      image: show.image ? show.image.image : MISSING_IMAGE_URL
-  }
-  ));
+  showsData.map(s => ({
+    id: s.show.id,
+    name: s.show.name,
+    summary: s.show.summary,
+    image: s.show.image ? s.show.image.medium : MISSING_IMAGE_URL,
+  }));
 
   return showsData;
 }
