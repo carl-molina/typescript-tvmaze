@@ -49,7 +49,7 @@ async function searchShowsByTerm(term: string): Promise<[IShows]> {
  *      { id, name, season, number }
  */
 
-async function getEpisodesOfShow(id: "number"): (Promise<[IShow]> ) {
+async function getEpisodesOfShow(id: number): (Promise<[IShow]> ) {
 
   const res = await fetch(`${TVMAZE_API_URL}shows/${id}/episodes`);
 

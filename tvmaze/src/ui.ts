@@ -70,9 +70,28 @@ $searchForm.on("submit", async function (evt) {
 
 
 /** Given list of episodes, create markup for each and append to DOM
- *
+ * Previous episodes shown are cleared before new episodes appended to DOM
  *
 */
 
-function populateEpisodes(episodes: ) {
+function populateEpisodes(episodes: IShow[]) {
+  $episodesArea.empty();
+  const $episodesUl = $("#episodesList")
+  for (let episode of episodes){
+    const $episode = $(
+            `<li>${episode.name} (${episode.season}, ${episode.number})</li>`
+          );
+    $episodesUl.append($episode);
+  }
 }
+
+$episodesArea.on("click", async function (evt) {
+  evt.preventDefault();
+  const showId = $(evt.target).closest("div[data-show-id]").attr("data-show-id");
+
+  const numShowId = Number(showId);
+
+  const episodesOfShow = await getEpisodesOfShow(numShowId);
+
+  populateEpisodes(episodesOfShow);
+});
