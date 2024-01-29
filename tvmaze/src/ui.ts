@@ -5,10 +5,24 @@ const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
 
+interface IShows {
+  id: number,
+  name: string,
+  summary: string,
+  image: string,
+}
 
-/** Given list of shows, create markup for each and to DOM */
+interface IShow {
+id: number,
+name: string,
+season: number,
+number: number,
+}
 
-function populateShows(shows) {
+
+/** Given list of shows, create markup for each and append to DOM */
+
+function populateShows(shows: IShows[]) {
   $showsList.empty();
   const x = "https://static.tvmaze.com/" +
     "uploads/images/medium_portrait/160/401704.jpg"
@@ -17,8 +31,8 @@ function populateShows(shows) {
       `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img
-              src=${x}
-              alt="Bletchly Circle San Francisco"
+              src=${show.image}
+              alt="${show.name}"
               class="w-25 me-3">
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
@@ -42,7 +56,7 @@ function populateShows(shows) {
  */
 
 async function searchForShowAndDisplay() {
-  const term = $("#searchForm-term").val();
+  const term = $("#searchForm-term").val() as string;
   const shows = await searchShowsByTerm(term);
 
   $episodesArea.hide();
@@ -55,7 +69,10 @@ $searchForm.on("submit", async function (evt) {
 });
 
 
-/** Write a clear docstring for this function... */
+/** Given list of episodes, create markup for each and append to DOM
+ *
+ *
+*/
 
-function populateEpisodes(episodes) {
+function populateEpisodes(episodes: ) {
 }
