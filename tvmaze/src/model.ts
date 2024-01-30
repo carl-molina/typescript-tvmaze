@@ -1,11 +1,29 @@
 const MISSING_IMAGE_URL = "https://tinyurl.com/missing-tv";
 const TVMAZE_API_URL = "https://api.tvmaze.com/";
 
+interface IShowsAPI {
+  show: {
+    id: number,
+    name: string,
+    summary: string,
+    image: {
+      medium: string,
+    }
+  }
+}
+
 interface IShows {
     id: number,
     name: string,
     summary: string,
     image: string,
+}
+
+interface IShowAPI {
+    id: number,
+    name: string,
+    season: number,
+    number: number,
 }
 
 interface IShow {
@@ -16,6 +34,7 @@ interface IShow {
 }
 
 
+
 /** Given a search term, search for tv shows that match that query.
  *
  *  Returns (promise) array of show objects: [show, show, ...].
@@ -23,14 +42,14 @@ interface IShow {
  *    (if no image URL given by API, put in a default image URL)
  */
 
-async function searchShowsByTerm(term: string): Promise<[]> {
+async function searchShowsByTerm(term: string): Promise<IShows[]> {
   // ADD: Remove placeholder & make request to TVMaze search shows API.
 
   const params = new URLSearchParams({q: term});
 
   const res = await fetch(`${TVMAZE_API_URL}/search/shows?${params}`);
 
-  let showsData = await res.json();
+  const showsData: IShowsAPI[] = await res.json();
 
   console.log("This is showsData: ", showsData);
 
@@ -49,19 +68,22 @@ async function searchShowsByTerm(term: string): Promise<[]> {
  *      { id, name, season, number }
  */
 
-async function getEpisodesOfShow(id: number): (Promise<[]> ) {
+async function getEpisodesOfShow(id: number): (Promise<IShow[]> ) {
 
   const res = await fetch(`${TVMAZE_API_URL}shows/${id}/episodes`);
 
-  const showData = await res.json();
+  console.log('This is res obj: ', res);
 
-  console.log("This is showData: ", showData);
-
-  if (showData.status === 404) {
+  if (res.status === 404) {
     throw new Error("404");
   }
 
-  const filteredShowData = showData.map(s => ({
+  const showData: IShowAPI[] = await res.json();
+
+  console.log("This is showData: ", showData);
+
+
+  const filteredShowData: IShow[] = showData.map(s => ({
     id: s.id,
     name: s.name,
     season: s.season,

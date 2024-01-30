@@ -22,10 +22,8 @@ number: number,
 
 /** Given list of shows, create markup for each and append to DOM */
 
-function populateShows(shows: IShows[]) {
+function populateShows(shows: IShows[]): void {
   $showsList.empty();
-  const x = "https://static.tvmaze.com/" +
-    "uploads/images/medium_portrait/160/401704.jpg"
   for (let show of shows) {
     const $show = $(
       `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
@@ -55,7 +53,7 @@ function populateShows(shows: IShows[]) {
  *    Hide episodes area (that only gets shown if they ask for episodes)
  */
 
-async function searchForShowAndDisplay() {
+async function searchForShowAndDisplay(): Promise<void> {
   const term = $("#searchForm-term").val() as string;
   const shows = await searchShowsByTerm(term);
 
@@ -74,7 +72,7 @@ $searchForm.on("submit", async function (evt) {
  *
 */
 
-function populateEpisodes(episodes: IShow[]) {
+function populateEpisodes(episodes: IShow[]): void {
 
   console.log("populateEpisodes function called")
   $episodesArea.empty();
@@ -88,16 +86,17 @@ function populateEpisodes(episodes: IShow[]) {
   $episodesArea.show()
 }
 // event delegate to
-$showsList.on("click", ".Show-getEpisodes", async function (evt) {
-  evt.preventDefault();
-  const showId = $(evt.target).closest(".Show").data("show-id");
-  console.log("showId is: ", showId)
+$showsList.on("click", ".Show-getEpisodes",
+  async function (evt): Promise<void> {
+    evt.preventDefault();
+    const showId: string = $(evt.target).closest(".Show").data("show-id");
+    console.log("showId is: ", showId)
 
-  const numShowId = Number(showId);
+    const numShowId: number = Number(showId);
 
-  const episodesOfShow = await getEpisodesOfShow(numShowId);
+    const episodesOfShow = await getEpisodesOfShow(numShowId);
 
-  console.log("episodesOfShow is: ", episodesOfShow )
+    console.log("episodesOfShow is: ", episodesOfShow )
 
-  populateEpisodes(episodesOfShow);
+    populateEpisodes(episodesOfShow);
 });
