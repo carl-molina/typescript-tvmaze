@@ -89,20 +89,18 @@ function populateEpisodes(episodes: IShow[]): void {
 }
 
 
+$showsList.on("click", ".Show-getEpisodes", handleClick);
 
-// event delegate to
-$showsList.on("click", ".Show-getEpisodes",
-  // have this be its own function, not anonymous fn
-  async function (evt: JQuery.ClickEvent): Promise<void> {
-    evt.preventDefault();
-    const showId: string = $(evt.target).closest(".Show").data("show-id");
-    console.log("showId is: ", showId)
+async function handleClick (evt: JQuery.ClickEvent): Promise<void> {
+  evt.preventDefault();
+  const showId: string = $(evt.target).closest(".Show").data("show-id");
+  console.log("showId is: ", showId)
 
-    const numShowId: number = Number(showId);
+  const numShowId: number = Number(showId);
 
-    const episodesOfShow: IShow[] = await getEpisodesOfShow(numShowId);
+  const episodesOfShow: IShow[] = await getEpisodesOfShow(numShowId);
 
-    console.log("episodesOfShow is: ", episodesOfShow )
+  console.log("episodesOfShow is: ", episodesOfShow )
 
-    populateEpisodes(episodesOfShow);
-});
+  populateEpisodes(episodesOfShow);
+}

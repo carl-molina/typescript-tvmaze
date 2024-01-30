@@ -1,14 +1,13 @@
 const MISSING_IMAGE_URL = "https://tinyurl.com/missing-tv";
 const TVMAZE_API_URL = "https://api.tvmaze.com/";
 
-interface IShowsAPI {
+interface IShowsAPIResults {
   show: {
     id: number,
     name: string,
     summary: string,
     image: {
-      medium: string,
-      // TODO: handle if the image doesn't show up (image: null)
+      medium: string | null
     };
   };
 }
@@ -20,14 +19,14 @@ interface IShows {
   image: string,
 }
 
-interface IShowAPI {
+interface IEpisodeAPIResult {
   id: number,
   name: string,
   season: number,
   number: number,
 }
 
-interface IShow {
+interface IEpisodeOfShow {
   id: number,
   name: string,
   season: number,
@@ -50,23 +49,19 @@ async function searchShowsByTerm(term: string): Promise<IShows[]> {
 
   const res = await fetch(`${TVMAZE_API_URL}/search/shows?${params}`);
 
-  const showsData: IShowsAPI[] = await res.json();
-  // TODO: IShowsAPI not descriptive enough, try "IShowsResults"
+  const showsData: IShowsAPIResults[] = await res.json();
 
   console.log("This is showsData: ", showsData);
 
-  // TODO: store s in a variable and map through that instead
-  // consider returning the whole map instead "return showsData.map(...)"
-  const filteredShowsData = showsData.map(s => ({
-    id: s.show.id,
-    name: s.show.name,
-    summary: s.show.summary,
-    image: s.show.image ? s.show.image.medium : MISSING_IMAGE_URL,
-    // image: s.show.image.medium || MISSING_IMAGE_URL,
-    // TODO: shorter way: s.show.image.medium || MISSING_IMAGE_URL
-  }));
-
-  return filteredShowsData;
+  return showsData.map(result => {
+    const show = result.show;
+    return {
+      id: show.id,
+      name: show.name,
+      summary: show.summary,
+      image: show.image?.medium || MISSING_IMAGE_URL
+    };
+  });
 }
 
 
@@ -84,24 +79,19 @@ async function getEpisodesOfShow(id: number): (Promise<IShow[]>) {
     throw new Error("404");
   }
 
-  const showData: IShowAPI[] = await res.json();
-  // TODO: be more descriptive, try "IEpisode"
+  const showData: IEpisodeAPIResult[] = await res.json();
 
   console.log("This is showData: ", showData);
 
 
-  // TODO: return map instead of storing in variable
-  const filteredShowData: IShow[] = showData.map(s => ({
+
+  return showData.map(s => ({
     id: s.id,
     name: s.name,
     season: s.season,
     number: s.number
   }));
-  // TODO: better name "IEpisodeOfShow"
 
-  console.log("This is filteredShowData: ", filteredShowData);
-
-  return filteredShowData;
 }
 
 
