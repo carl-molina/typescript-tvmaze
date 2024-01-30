@@ -54,14 +54,14 @@ function populateShows(shows: IShows[]): void {
  */
 
 async function searchForShowAndDisplay(): Promise<void> {
-  const term = $("#searchForm-term").val() as string;
+  const term = $("#searchForm-term").val() as string; // "as" treats this as string
   const shows = await searchShowsByTerm(term);
 
   $episodesArea.hide();
   populateShows(shows);
 }
 
-$searchForm.on("submit", async function (evt) {
+$searchForm.on("submit", async function (evt: JQuery.SubmitEvent) {
   evt.preventDefault();
   await searchForShowAndDisplay();
 });
@@ -76,7 +76,9 @@ function populateEpisodes(episodes: IShow[]): void {
 
   console.log("populateEpisodes function called")
   $episodesArea.empty();
+  // space here
   const $episodesUl = $("#episodesList")
+  // space here
   for (let episode of episodes){
     const $episode = $(
             `<li>${episode.name} (${episode.season}, ${episode.number})</li>`
@@ -85,16 +87,20 @@ function populateEpisodes(episodes: IShow[]): void {
   }
   $episodesArea.show()
 }
+
+
+
 // event delegate to
 $showsList.on("click", ".Show-getEpisodes",
-  async function (evt): Promise<void> {
+  // have this be its own function, not anonymous fn
+  async function (evt: JQuery.ClickEvent): Promise<void> {
     evt.preventDefault();
     const showId: string = $(evt.target).closest(".Show").data("show-id");
     console.log("showId is: ", showId)
 
     const numShowId: number = Number(showId);
 
-    const episodesOfShow = await getEpisodesOfShow(numShowId);
+    const episodesOfShow: IShow[] = await getEpisodesOfShow(numShowId);
 
     console.log("episodesOfShow is: ", episodesOfShow )
 

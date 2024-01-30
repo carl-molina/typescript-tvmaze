@@ -8,22 +8,23 @@ interface IShowsAPI {
     summary: string,
     image: {
       medium: string,
-    }
-  }
+      // TODO: handle if the image doesn't show up (image: null)
+    };
+  };
 }
 
 interface IShows {
-    id: number,
-    name: string,
-    summary: string,
-    image: string,
+  id: number,
+  name: string,
+  summary: string,
+  image: string,
 }
 
 interface IShowAPI {
-    id: number,
-    name: string,
-    season: number,
-    number: number,
+  id: number,
+  name: string,
+  season: number,
+  number: number,
 }
 
 interface IShow {
@@ -45,19 +46,24 @@ interface IShow {
 async function searchShowsByTerm(term: string): Promise<IShows[]> {
   // ADD: Remove placeholder & make request to TVMaze search shows API.
 
-  const params = new URLSearchParams({q: term});
+  const params = new URLSearchParams({ q: term });
 
   const res = await fetch(`${TVMAZE_API_URL}/search/shows?${params}`);
 
   const showsData: IShowsAPI[] = await res.json();
+  // TODO: IShowsAPI not descriptive enough, try "IShowsResults"
 
   console.log("This is showsData: ", showsData);
 
+  // TODO: store s in a variable and map through that instead
+  // consider returning the whole map instead "return showsData.map(...)"
   const filteredShowsData = showsData.map(s => ({
     id: s.show.id,
     name: s.show.name,
     summary: s.show.summary,
     image: s.show.image ? s.show.image.medium : MISSING_IMAGE_URL,
+    // image: s.show.image.medium || MISSING_IMAGE_URL,
+    // TODO: shorter way: s.show.image.medium || MISSING_IMAGE_URL
   }));
 
   return filteredShowsData;
@@ -68,9 +74,9 @@ async function searchShowsByTerm(term: string): Promise<IShows[]> {
  *      { id, name, season, number }
  */
 
-async function getEpisodesOfShow(id: number): (Promise<IShow[]> ) {
+async function getEpisodesOfShow(id: number): (Promise<IShow[]>) {
 
-  const res = await fetch(`${TVMAZE_API_URL}shows/${id}/episodes`);
+  const res: Response = await fetch(`${TVMAZE_API_URL}shows/${id}/episodes`);
 
   console.log('This is res obj: ', res);
 
@@ -79,16 +85,19 @@ async function getEpisodesOfShow(id: number): (Promise<IShow[]> ) {
   }
 
   const showData: IShowAPI[] = await res.json();
+  // TODO: be more descriptive, try "IEpisode"
 
   console.log("This is showData: ", showData);
 
 
+  // TODO: return map instead of storing in variable
   const filteredShowData: IShow[] = showData.map(s => ({
     id: s.id,
     name: s.name,
     season: s.season,
     number: s.number
-  }))
+  }));
+  // TODO: better name "IEpisodeOfShow"
 
   console.log("This is filteredShowData: ", filteredShowData);
 
